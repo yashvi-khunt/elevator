@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevator Task</title>
+
+    <style>
+        svg,
+        img {
+            height: 30px;
+            width: 30px;
+        }
+
+        button {
+            cursor: pointer;
+            background: none;
+            /* text-decoration: none; */
+            outline: none;
+            border: none;
+        }
+
+        .container {
+            margin: 150px auto;
+            width: 70%;
+            height: 600px;
+            background-color: #006266;
+        }
+
+        .top,
+        .maintanence {
+            width: 90%;
+
+            margin: 0 auto;
+            display: flex;
+            gap: 15px;
+            justify-content: space-around;
+        }
+
+        .top {
+            padding: 20px 0 10px 0;
+            height: 90%;
+
+        }
+
+        .top-box,
+        .maintain {
+            width: 100%;
+            /* flex: 1 100%; */
+            height: 100%;
+        }
+
+        .lifts {
+            display: flex;
+            justify-content: center;
+            background-color: #b1e2ff;
+            position: relative;
+        }
+
+        .compartment {
+            width: 60%;
+            margin: 5px auto;
+            position: relative;
+
+            color: #ffffff;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .compartment>div,
+        #control>div {
+            /* position: relative; */
+            height: 108px;
+        }
+
+        #traverse {
+            background-color: #71797E;
+            width: 60%;
+            margin: 0px auto;
+            height: 108px;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top">
+            <div id="lift1" class="lifts top-box">
+                <div class="compartment">
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+                <div id="traverse"></div>
+            </div>
+            <div id="lift2" class="lifts top-box">
+                <div class="compartment">
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+                <div id="traverse"></div>
+            </div>
+            <div id="lift3" class="lifts top-box">
+                <div class="compartment">
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+                <div id="traverse"></div>
+            </div>
+            <div id="control" class="top-box">
+                <div id="floor-5">5
+                    <button class="up"><img src="./images/up-round.svg"></button>
+                    <button class="down"><img src="./images/down-round.svg"></button>
+                </div>
+                <div id="floor-4">4
+                    <button class="up"><img src="./images/up-round.svg"></button>
+                    <button class="down"><img src="./images/down-round.svg"></button>
+                </div>
+                <div id="floor-3">3
+                    <button class="up"><img src="./images/up-round.svg"></button>
+                    <button class="down"><img src="./images/down-round.svg"></button>
+                </div>
+                <div id="floor-2">2
+                    <button class="up"><img src="./images/up-round.svg"></button>
+                    <button class="down"><img src="./images/down-round.svg"></button>
+                </div>
+                <div id="floor-1">1
+                    <button class="up"><img src="./images/up-round.svg"></button>
+                    <button class="down"><img src="./images/down-round.svg"></button>
+                </div>
+            </div>
+        </div>
+        <div class="maintanence">
+            <div class="maintain mbutton"><button id="click">switch</button></div>
+            <div class="maintain mbutton"><button>switch</button></div>
+            <div class="maintain mbutton"><button>switch</button></div>
+            <div class="maintain mText">maintanence</div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const up = function () {
+        const lift = document.getElementById('traverse');
+        console.log(lift)
+        lift.style.bottom = '108px';
+    }
+    document.getElementById('click').addEventListener('click', up);
+</script>
+
+</html>
