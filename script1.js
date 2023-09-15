@@ -3,7 +3,7 @@ let numLifts;
 let numFloors;
 let lifts = [];
 
-//Adding Lift and Floors dynamically
+//UI
 const addLifts = function () {
   const liftControl = document.getElementById("control");
   const liftManintanence = document.querySelector(".maintanence");
@@ -14,7 +14,7 @@ const addLifts = function () {
     liftHtml += `<div id="lift${i + 1}" class="lifts top-box">
           <div class="compartment">`;
     liftHtml += `</div>
-          <div class="lift-block"></div>
+          <div class="lift-block" id="liftBlock${i + 1}" ></div>
       </div>`;
 
     maintainHtml += `<div class="maintain mbutton"> <input type="checkbox" id="switch${
@@ -28,10 +28,11 @@ const addLifts = function () {
   </div>`;
 
     lifts.push({
-      liftName: `Lift${i + 1}`,
-      status: "active",
+      liftName: `lift${i + 1}`,
+      status: true,
       currentFloor: 1,
-      destination: "",
+      destination: 1,
+      direction: "up",
       toFloors: [],
     });
   }
@@ -64,19 +65,72 @@ const addLifts = function () {
 };
 
 const init = function () {
-  //   numLifts = prompt("Enter number of lifts");
-  //   numFloors = prompt("Enter number of floors");
   numLifts = 3;
-  numFloors = 5;
+  numFloors = 7;
   addLifts();
-
-  //   lifts = [...document.getElementsByClassName("lift-block")];
 };
 
 init();
+const moveFloorUp = function (lift) {
+  //   lift.currentFloor += 1;
+  console.log(
+    document.getElementById(lift.liftName).children[1].getAttribute("style")
+  );
+};
+const travel = function (floor, lift, direction) {
+  // if (direction === "up") {
+  //   while (lift.currentFloor !== floor) {
+  //     console.log(lift.currentFloor);
+  moveFloorUp(lift);
+  //   }
+  // }
+  document.getElementById(lift.liftName).children[1].style.bottom = `${
+    (floor - 1) * 108
+  }px`;
+  lift.currentFloor = floor;
+};
 
-console.log(lifts);
+const selectLift = function (liftArray, destination, direction) {
+  const arr = liftArray
+    .filter((ele) => ele.direction === direction)
+    .map((ele) => Math.abs(ele.currentFloor - destination));
+  console.log(arr);
+  const min = Math.min(...arr);
+  console.log(min);
+  return liftArray[arr.findIndex((ele) => ele === min)].liftName;
+};
+// console.log(lifts);
 
-const moveLift = function (lift) {};
+const moveLift = function (element) {
+  // Array of active lifts
+  const activeLifts = lifts.filter((lift) => lift.status === true);
 
-const outOfOrder = function (lift) {};
+  const toFloor = element.id.split("-")[1];
+  const direction = element.id.split("-")[2];
+  console.log(direction);
+
+  const currentLiftName = selectLift(activeLifts, toFloor, direction);
+  console.log(currentLiftName);
+  const currentLiftIndex = lifts.findIndex(
+    (l) => l.liftName === currentLiftName
+  );
+  const currentLiftObject = lifts[currentLiftIndex];
+  console.log(currentLiftObject);
+  travel(toFloor, currentLiftObject);
+};
+
+const outOfOrder = function (element) {
+  const liftNumber = element.id.slice(-1);
+
+  const liftBlock = document.getElementById(`liftBlock${liftNumber}`);
+  // const liftBlock = liftElement.children[1];
+
+  if (lifts[liftNumber - 1].status === true) {
+    lifts[liftNumber - 1].status = false;
+    liftBlock.style.bottom = 0;
+  } else {
+    lifts[liftNumber - 1].status = true;
+  }
+
+  liftBlock.classList.toggle("outoforder");
+};

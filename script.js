@@ -2,11 +2,31 @@
 let numLifts;
 let numFloors;
 let lifts;
-
 let toFloor;
 let activeLift;
 let liftState = [];
+let disableLifts = [];
 let travelDistance = 0;
+
+const findMin = function (distance) {
+  let tempArr = new Array(distance.length).fill().map((ele, i) => {
+    return (ele = Array(1).fill([distance[i], i, disableLifts[i]]));
+  });
+  console.log(tempArr);
+  const tempArr2 = tempArr.filter((ele) => {
+    console.log(ele);
+    if (ele[0][2] === false) {
+      return ele;
+    }
+  });
+  console.log(tempArr2);
+  tempArr2.sort((a, b) => {
+    if (a[0] < b[0]) return -1;
+    else return 1;
+  });
+
+  return tempArr2[0];
+};
 
 const calcDistance = function (destination) {
   const distances = liftState.map((state) => {
@@ -14,13 +34,16 @@ const calcDistance = function (destination) {
     return Math.abs(state - destination);
   });
   //   console.log(distances);
-  const minDis = Math.min(...distances);
-  const liftIndex = distances.indexOf(minDis);
+  let [[minDis, liftIndex, c]] = findMin(distances);
+  // findMin();
+  console.log(minDis, liftIndex, c);
+  // let minDis = Math.min(...distances);
+  // const liftIndex = distances.indexOf(minDis);
   return [minDis, liftIndex];
 };
 
 const moveLift = function (lift) {
-  lift.children[0].style.fill = "aqua";
+  // lift.children[0].style.fill = "aqua";
   toFloor = lift.id.split("-")[1];
   [travelDistance, activeLift] = calcDistance(toFloor);
   console.log(`activeLift: ${activeLift}`);
@@ -44,7 +67,7 @@ const addLifts = function () {
       liftHtml += `<div>${j}</div>`;
     }
     liftHtml += `</div>
-        <div class="lift-block"></div>
+        <div class="lift-block" id="liftBlock${i + 1}"></div>
     </div>`;
 
     maintainHtml += `<div class="maintain mbutton"> <input type="checkbox" id="switch${
@@ -58,6 +81,7 @@ const addLifts = function () {
 </div>`;
 
     liftState.push(1);
+    disableLifts.push(false);
   }
 
   liftControl.insertAdjacentHTML("beforebegin", liftHtml);
@@ -88,22 +112,28 @@ const addLifts = function () {
 };
 
 const init = function () {
-  //   numLifts = prompt("Enter number of lifts");
-  //   numFloors = prompt("Enter number of floors");
-  numLifts = 3;
-  numFloors = 7;
+  numLifts = prompt("Enter number of lifts");
+  numFloors = prompt("Enter number of floors");
   addLifts();
 
   lifts = [...document.getElementsByClassName("lift-block")];
+  console.log(lifts);
 };
 
 init();
 
 const outOfOrder = function (lift) {
-  console.log(lift);
+  // console.log(lifts);
+  // console.log(lift);
   let liftnum = lift.id.slice(-1);
+  // console.log(liftnum);
   let block = document.getElementById(`lift${liftnum}`);
   console.log(block.children[1]);
+  // block.children[1].style.removeProperty("bottom");
   block.children[1].classList.toggle("outoforder");
   block.children[1].style.bottom = 0;
+  disableLifts[liftnum - 1]
+    ? (disableLifts[liftnum - 1] = false)
+    : (disableLifts[liftnum - 1] = true);
+  // console.log(disableLifts);
 };
