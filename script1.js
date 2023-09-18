@@ -32,7 +32,6 @@ const addLifts = function () {
       status: true,
       currentFloor: 1,
       destination: 1,
-      direction: "up",
       toFloors: [],
     });
   }
@@ -72,31 +71,54 @@ const init = function () {
 
 init();
 const moveFloorUp = function (lift) {
-  //   lift.currentFloor += 1;
-  console.log(
-    document.getElementById(lift.liftName).children[1].getAttribute("style")
-  );
+  lift.currentFloor += 1;
+  let block = document.getElementById(lift.liftName).children[1];
+  let liftBottom = block.style.bottom || `0px`;
+  liftBottom = liftBottom.slice(0, -2);
+  liftBottom = +liftBottom + 108;
+  console.log(block.style.bottom);
+  block.style.bottom = `${liftBottom}px`;
+  console.log(block.style.bottom);
 };
+
+const moveFloorDown = function (lift) {
+  lift.currentFloor = 1;
+  let block = document.getElementById(lift.liftName).children[1];
+  let liftBottom = block.style.bottom || `0px`;
+  liftBottom = liftBottom.slice(0, -2);
+  liftBottom = +liftBottom - 108;
+  console.log(block.style.bottom);
+  block.style.bottom = `${liftBottom}px`;
+  console.log(block.style.bottom);
+};
+
 const travel = function (floor, lift, direction) {
-  // if (direction === "up") {
-  //   while (lift.currentFloor !== floor) {
-  //     console.log(lift.currentFloor);
-  moveFloorUp(lift);
-  //   }
-  // }
-  document.getElementById(lift.liftName).children[1].style.bottom = `${
-    (floor - 1) * 108
-  }px`;
-  lift.currentFloor = floor;
+  // console.log(lift);
+  lift.destination = floor;
+  console.log(lift);
+  if (direction === "up") {
+    console.log(lift.currentFloor, lift.destination);
+    while (lift.currentFloor !== lift.destination) {
+      if (lift.currentFloor <= floor) {
+        console.log(lift.currentFloor);
+        moveFloorUp(lift);
+      } else {
+        console.log(lift.currentFloor);
+        moveFloorDown(lift);
+      }
+      // console.log("o");
+    }
+  }
+
+  console.log(lift.currentFloor);
 };
 
 const selectLift = function (liftArray, destination, direction) {
-  const arr = liftArray
-    .filter((ele) => ele.direction === direction)
-    .map((ele) => Math.abs(ele.currentFloor - destination));
-  console.log(arr);
+  console.log(liftArray);
+  const arr = liftArray.map((ele) => Math.abs(ele.currentFloor - destination));
+  // console.log(arr);
   const min = Math.min(...arr);
-  console.log(min);
+  // console.log(min);
   return liftArray[arr.findIndex((ele) => ele === min)].liftName;
 };
 // console.log(lifts);
@@ -105,7 +127,7 @@ const moveLift = function (element) {
   // Array of active lifts
   const activeLifts = lifts.filter((lift) => lift.status === true);
 
-  const toFloor = element.id.split("-")[1];
+  const toFloor = Number(element.id.split("-")[1]);
   const direction = element.id.split("-")[2];
   console.log(direction);
 
@@ -116,7 +138,7 @@ const moveLift = function (element) {
   );
   const currentLiftObject = lifts[currentLiftIndex];
   console.log(currentLiftObject);
-  travel(toFloor, currentLiftObject);
+  travel(toFloor, currentLiftObject, direction);
 };
 
 const outOfOrder = function (element) {

@@ -127,7 +127,7 @@ button {
   width: 25px;
   border-radius: 25px;
   /* transition: 1s; */
-  transition: 0.1s;
+  transition: 1s;
 }
 
 .checkbox:checked + label > .toggle-switch {
